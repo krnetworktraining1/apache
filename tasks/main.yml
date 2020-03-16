@@ -1,0 +1,25 @@
+- name: install httpd  install
+  yum:
+          name: "{{ web_svc }}"
+          state: installed
+
+
+- include_vars: redhat/abc.yml
+
+
+
+- name: copy website data  into "{{ documentroot }}"
+  copy:
+          src: data/
+          dest: "{{ documentroot }}"
+
+- name: copy web.conf.j2 into "{{ web_conf }}"
+  template:
+          src: web.conf.j2
+          dest: "{{ web_conf }}"
+  notify: restart_apache
+
+
+- import_tasks: fw.yml
+  
+
